@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ncwjod" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="BoundaryEventExample" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:sequenceFlow id="Flow_16r4af1" sourceRef="StartEvent_1" targetRef="WorkflowStartedSuccessfullyTask" />
+    <bpmn:serviceTask id="WorkflowStartedSuccessfullyTask" name="Workflow started successfully" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:incoming>Flow_16r4af1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k8fwla</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0n9suep">
+      <bpmn:incoming>Flow_17mk90n</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1k8fwla" sourceRef="WorkflowStartedSuccessfullyTask" targetRef="Gateway_012in3o" />
+    <bpmn:exclusiveGateway id="Gateway_012in3o">
+      <bpmn:incoming>Flow_1k8fwla</bpmn:incoming>
+      <bpmn:outgoing>StartedSequenceFlow</bpmn:outgoing>
+      <bpmn:outgoing>NotStartedSequenceFlow</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="StartedSequenceFlow" name="Started" sourceRef="Gateway_012in3o" targetRef="WaitResponseTask">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{workflow_status == 'STARTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="NotStartedSequenceFlow" name="not Started" sourceRef="Gateway_012in3o" targetRef="WorkflowEndedTask">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{workflow_status == 'NOT_STARTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0reo4y2">
+      <bpmn:incoming>Flow_1xhsfi0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xhsfi0" sourceRef="WorkflowEndedTask" targetRef="Event_0reo4y2" />
+    <bpmn:serviceTask id="WorkflowEndedTask" name="Workflow ended" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowEnd">
+      <bpmn:incoming>NotStartedSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xhsfi0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_17mk90n" sourceRef="WaitResponseTask" targetRef="Event_0n9suep" />
+    <bpmn:receiveTask id="WaitResponseTask" name="Wait Response" messageRef="Message_30rae8q">
+      <bpmn:incoming>StartedSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_17mk90n</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:boundaryEvent id="Event_1kwoc7q" attachedToRef="WaitResponseTask">
+      <bpmn:outgoing>Flow_1yxyth1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1nxozf9" messageRef="Message_1quocjf" />
+    </bpmn:boundaryEvent>
+    <bpmn:endEvent id="EndEvent1">
+      <bpmn:incoming>Flow_1eapbh1</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1yxyth1" sourceRef="Event_1kwoc7q" targetRef="EventCancelledTask" />
+    <bpmn:serviceTask id="EventCancelledTask" name="Event Cancelled" camunda:class="mu.mns.camunda.javadelegate.LoggerEventCancelled">
+      <bpmn:incoming>Flow_1yxyth1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1eapbh1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1eapbh1" sourceRef="EventCancelledTask" targetRef="EndEvent1" />
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_16r4af1</bpmn:outgoing>
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmn:message id="Message_1eguchk" name="camunda-start-message2" />
+  <bpmn:message id="Message_30rae8q" name="wait-response-boundary" />
+  <bpmn:message id="Message_1quocjf" name="event_cancelled" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="BoundaryEventExample">
+      <bpmndi:BPMNShape id="Activity_1cig8e2_di" bpmnElement="WorkflowStartedSuccessfullyTask">
+        <dc:Bounds x="240" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0n9suep_di" bpmnElement="Event_0n9suep">
+        <dc:Bounds x="992" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_012in3o_di" bpmnElement="Gateway_012in3o" isMarkerVisible="true">
+        <dc:Bounds x="455" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0reo4y2_di" bpmnElement="Event_0reo4y2">
+        <dc:Bounds x="992" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gahdg8_di" bpmnElement="WorkflowEndedTask">
+        <dc:Bounds x="640" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xw5wr3_di" bpmnElement="WaitResponseTask">
+        <dc:Bounds x="640" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0it9xzq_di" bpmnElement="EndEvent1">
+        <dc:Bounds x="992" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11hgybh_di" bpmnElement="EventCancelledTask">
+        <dc:Bounds x="760" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l6kjik_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0e9290x_di" bpmnElement="Event_1kwoc7q">
+        <dc:Bounds x="682" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16r4af1_di" bpmnElement="Flow_16r4af1">
+        <di:waypoint x="188" y="220" />
+        <di:waypoint x="240" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k8fwla_di" bpmnElement="Flow_1k8fwla">
+        <di:waypoint x="340" y="220" />
+        <di:waypoint x="455" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_098syfh_di" bpmnElement="StartedSequenceFlow">
+        <di:waypoint x="505" y="220" />
+        <di:waypoint x="640" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="544" y="206" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w24h74_di" bpmnElement="NotStartedSequenceFlow">
+        <di:waypoint x="480" y="245" />
+        <di:waypoint x="480" y="350" />
+        <di:waypoint x="640" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="333" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xhsfi0_di" bpmnElement="Flow_1xhsfi0">
+        <di:waypoint x="740" y="350" />
+        <di:waypoint x="992" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17mk90n_di" bpmnElement="Flow_17mk90n">
+        <di:waypoint x="740" y="220" />
+        <di:waypoint x="992" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yxyth1_di" bpmnElement="Flow_1yxyth1">
+        <di:waypoint x="700" y="162" />
+        <di:waypoint x="700" y="100" />
+        <di:waypoint x="760" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eapbh1_di" bpmnElement="Flow_1eapbh1">
+        <di:waypoint x="860" y="100" />
+        <di:waypoint x="992" y="100" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

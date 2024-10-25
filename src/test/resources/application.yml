@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+camunda:
+  bpm:
+    database:
+      schema-update: true  # Auto-updates the database schema
+
+camunda.bpm.admin-user:
+  id: demo
+  password: demo

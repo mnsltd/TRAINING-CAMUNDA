@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_070ps4h" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="CallActivityExample" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:endEvent id="Event_08a3cnn">
+      <bpmn:incoming>Flow_0mk59l8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:callActivity id="Activity_154l85y" name="Start Loan Approval Process" camunda:asyncBefore="true" calledElement="Camunda3" camunda:variableMappingClass="mu.mns.camunda.delegateMapping.DelegateMapping">
+      <bpmn:extensionElements>
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11bdgdn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0th07fn</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:startEvent id="Event_0prwy7j">
+      <bpmn:outgoing>Flow_1l8umr5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1l8umr5" sourceRef="Event_0prwy7j" targetRef="Activity_1nvqa4w" />
+    <bpmn:sequenceFlow id="Flow_11bdgdn" sourceRef="Activity_1nvqa4w" targetRef="Activity_154l85y" />
+    <bpmn:sequenceFlow id="Flow_0th07fn" sourceRef="Activity_154l85y" targetRef="Activity_0dvmfn7" />
+    <bpmn:sequenceFlow id="Flow_0mg3tpb" sourceRef="Activity_0dvmfn7" targetRef="Activity_047lkym" />
+    <bpmn:serviceTask id="Activity_1nvqa4w" name="send email notification request received" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:incoming>Flow_1l8umr5</bpmn:incoming>
+      <bpmn:outgoing>Flow_11bdgdn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0dvmfn7" name="Inform user about loan status" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowEnd">
+      <bpmn:incoming>Flow_0th07fn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mg3tpb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0mk59l8" sourceRef="Activity_047lkym" targetRef="Event_08a3cnn" />
+    <bpmn:userTask id="Activity_047lkym" name="Verify returned variable">
+      <bpmn:incoming>Flow_0mg3tpb</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mk59l8</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CallActivityExample">
+      <bpmndi:BPMNShape id="Event_08a3cnn_di" bpmnElement="Event_08a3cnn">
+        <dc:Bounds x="882" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00kn7fk_di" bpmnElement="Activity_154l85y">
+        <dc:Bounds x="410" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0prwy7j_di" bpmnElement="Event_0prwy7j">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uv5a2j_di" bpmnElement="Activity_1nvqa4w">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1y8i7fs_di" bpmnElement="Activity_0dvmfn7">
+        <dc:Bounds x="580" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0azp5es_di" bpmnElement="Activity_047lkym" bioc:fill="#ffffff" color:background-color="#ffffff">
+        <dc:Bounds x="740" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1l8umr5_di" bpmnElement="Flow_1l8umr5">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11bdgdn_di" bpmnElement="Flow_11bdgdn">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="410" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0th07fn_di" bpmnElement="Flow_0th07fn">
+        <di:waypoint x="510" y="120" />
+        <di:waypoint x="580" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mg3tpb_di" bpmnElement="Flow_0mg3tpb">
+        <di:waypoint x="680" y="120" />
+        <di:waypoint x="740" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mk59l8_di" bpmnElement="Flow_0mk59l8">
+        <di:waypoint x="840" y="120" />
+        <di:waypoint x="882" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

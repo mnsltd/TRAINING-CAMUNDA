@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ncwjod" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="TransactionExample" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:sequenceFlow id="Flow_16r4af1" sourceRef="StartEvent_1" targetRef="Activity_1ull9gu" />
+    <bpmn:serviceTask id="Activity_1ull9gu" name="Workflow started successfully" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:incoming>Flow_16r4af1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k8fwla</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1k8fwla" sourceRef="Activity_1ull9gu" targetRef="Activity_1m0i5jt" />
+    <bpmn:endEvent id="Event_0reo4y2">
+      <bpmn:incoming>Flow_0oq30ow</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xhsfi0" sourceRef="Activity_1j4f13d" targetRef="Activity_1gvbcob" />
+    <bpmn:serviceTask id="Activity_1j4f13d" name="Throw Error" camunda:asyncBefore="true" camunda:class="mu.mns.camunda.javadelegate.ThrowError">
+      <bpmn:incoming>Flow_0teqrol</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xhsfi0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_16r4af1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0teqrol" sourceRef="Activity_0kofav0" targetRef="Activity_1j4f13d" />
+    <bpmn:sequenceFlow id="Flow_0oq30ow" sourceRef="Activity_1gvbcob" targetRef="Event_0reo4y2" />
+    <bpmn:serviceTask id="Activity_0kofav0" name="Log Start" camunda:asyncBefore="true" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:incoming>Flow_14v2iih</bpmn:incoming>
+      <bpmn:outgoing>Flow_0teqrol</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1gvbcob" name="Log Cancel" camunda:asyncBefore="true" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowEnd">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1xhsfi0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oq30ow</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_14v2iih" sourceRef="Activity_1m0i5jt" targetRef="Activity_0kofav0" />
+    <bpmn:userTask id="Activity_1m0i5jt" name="Test">
+      <bpmn:incoming>Flow_1k8fwla</bpmn:incoming>
+      <bpmn:outgoing>Flow_14v2iih</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmn:message id="Message_30rae8q" name="wait-response" />
+  <bpmn:message id="Message_1quocjf" name="event_cancelled" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TransactionExample">
+      <bpmndi:BPMNShape id="Activity_1cig8e2_di" bpmnElement="Activity_1ull9gu">
+        <dc:Bounds x="300" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0reo4y2_di" bpmnElement="Event_0reo4y2">
+        <dc:Bounds x="1342" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gahdg8_di" bpmnElement="Activity_1j4f13d">
+        <dc:Bounds x="960" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l6kjik_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_159yz1j_di" bpmnElement="Activity_0kofav0">
+        <dc:Bounds x="720" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dozp07_di" bpmnElement="Activity_1gvbcob">
+        <dc:Bounds x="1150" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1hbkfdy_di" bpmnElement="Activity_1m0i5jt">
+        <dc:Bounds x="490" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16r4af1_di" bpmnElement="Flow_16r4af1">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="300" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k8fwla_di" bpmnElement="Flow_1k8fwla">
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="490" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xhsfi0_di" bpmnElement="Flow_1xhsfi0">
+        <di:waypoint x="1060" y="120" />
+        <di:waypoint x="1150" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0teqrol_di" bpmnElement="Flow_0teqrol">
+        <di:waypoint x="820" y="120" />
+        <di:waypoint x="960" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oq30ow_di" bpmnElement="Flow_0oq30ow">
+        <di:waypoint x="1250" y="120" />
+        <di:waypoint x="1342" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14v2iih_di" bpmnElement="Flow_14v2iih">
+        <di:waypoint x="590" y="120" />
+        <di:waypoint x="720" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

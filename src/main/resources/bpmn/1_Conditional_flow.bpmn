@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ncwjod" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="ConditionalFlowExample" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:sequenceFlow id="Flow_16r4af1" sourceRef="StartEvent_1" targetRef="WorkflowStartedSuccessfullyTask" />
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_16r4af1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_01x1n0e" messageRef="Message_1eguchk" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="WorkflowStartedSuccessfullyTask" name="Workflow started successfully" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="mu.mns.camunda.executionlistener.LogExecutionListener" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16r4af1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k8fwla</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent">
+      <bpmn:incoming>Flow_10i5dmy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1k8fwla" sourceRef="WorkflowStartedSuccessfullyTask" targetRef="Gateway_012in3o" />
+    <bpmn:exclusiveGateway id="Gateway_012in3o">
+      <bpmn:incoming>Flow_1k8fwla</bpmn:incoming>
+      <bpmn:outgoing>StartedSequenceFlow</bpmn:outgoing>
+      <bpmn:outgoing>NotStartedSequenceFlow</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="StartedSequenceFlow" name="Started" sourceRef="Gateway_012in3o" targetRef="UserTask1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{workflow_status == 'STARTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="NotStartedSequenceFlow" name="not Started" sourceRef="Gateway_012in3o" targetRef="WorkflowEndedTask">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{workflow_status == 'NOT_STARTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="WorkflowEndedEvent">
+      <bpmn:incoming>Flow_1xhsfi0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xhsfi0" sourceRef="WorkflowEndedTask" targetRef="WorkflowEndedEvent" />
+    <bpmn:serviceTask id="WorkflowEndedTask" name="Workflow ended" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowEnd">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="mu.mns.camunda.executionlistener.LogExecutionListener" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>NotStartedSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xhsfi0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="UserTask1" name="User Task">
+      <bpmn:incoming>StartedSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_10i5dmy</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_10i5dmy" sourceRef="UserTask1" targetRef="EndEvent" />
+  </bpmn:process>
+  <bpmn:message id="Message_1eguchk" name="workflow-start-message" />
+  <bpmn:message id="Message_30rae8q" name="wait-response" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ConditionalFlowExample">
+      <bpmndi:BPMNShape id="Event_17eyu39_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cig8e2_di" bpmnElement="WorkflowStartedSuccessfullyTask">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0n9suep_di" bpmnElement="EndEvent">
+        <dc:Bounds x="802" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_012in3o_di" bpmnElement="Gateway_012in3o" isMarkerVisible="true">
+        <dc:Bounds x="455" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0reo4y2_di" bpmnElement="WorkflowEndedEvent">
+        <dc:Bounds x="802" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gahdg8_di" bpmnElement="WorkflowEndedTask">
+        <dc:Bounds x="600" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17tsghf_di" bpmnElement="UserTask1">
+        <dc:Bounds x="600" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16r4af1_di" bpmnElement="Flow_16r4af1">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k8fwla_di" bpmnElement="Flow_1k8fwla">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="455" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_098syfh_di" bpmnElement="StartedSequenceFlow">
+        <di:waypoint x="505" y="120" />
+        <di:waypoint x="600" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="102" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w24h74_di" bpmnElement="NotStartedSequenceFlow">
+        <di:waypoint x="480" y="145" />
+        <di:waypoint x="480" y="250" />
+        <di:waypoint x="600" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="493" y="233" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xhsfi0_di" bpmnElement="Flow_1xhsfi0">
+        <di:waypoint x="700" y="250" />
+        <di:waypoint x="802" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10i5dmy_di" bpmnElement="Flow_10i5dmy">
+        <di:waypoint x="700" y="120" />
+        <di:waypoint x="802" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

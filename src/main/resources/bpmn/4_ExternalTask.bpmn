@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ncwjod" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="ExternalTaskExample" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:sequenceFlow id="Flow_16r4af1" sourceRef="StartEvent_1" targetRef="WorkflowStartedSuccessfullyTask" />
+    <bpmn:serviceTask id="WorkflowStartedSuccessfullyTask" name="Workflow started successfully" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowStart">
+      <bpmn:incoming>Flow_16r4af1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k8fwla</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1k8fwla" sourceRef="WorkflowStartedSuccessfullyTask" targetRef="Gateway_012in3o" />
+    <bpmn:endEvent id="Event_0reo4y2">
+      <bpmn:incoming>Flow_1xhsfi0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xhsfi0" sourceRef="WorkflowEndedTask" targetRef="Event_0reo4y2" />
+    <bpmn:serviceTask id="WorkflowEndedTask" name="Workflow ended" camunda:class="mu.mns.camunda.javadelegate.LoggerWorkflowEnd">
+      <bpmn:incoming>Flow_0xmuc7j</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xhsfi0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:eventBasedGateway id="Gateway_012in3o">
+      <bpmn:incoming>Flow_1k8fwla</bpmn:incoming>
+      <bpmn:outgoing>NotStartedSequenceFlow</bpmn:outgoing>
+      <bpmn:outgoing>Flow_077n0y4</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="Event_1s93vtx">
+      <bpmn:incoming>NotStartedSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xmuc7j</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_04bw8eb" messageRef="Message_3p2nr9i" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="NotStartedSequenceFlow" name="Not started" sourceRef="Gateway_012in3o" targetRef="Event_1s93vtx" />
+    <bpmn:sequenceFlow id="Flow_0xmuc7j" sourceRef="Event_1s93vtx" targetRef="WorkflowEndedTask" />
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_16r4af1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:intermediateCatchEvent id="Event_1u4zrhr">
+      <bpmn:incoming>Flow_077n0y4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0j671fq</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0ylhz8z" messageRef="Message_30rae8q" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_077n0y4" sourceRef="Gateway_012in3o" targetRef="Event_1u4zrhr" />
+    <bpmn:sequenceFlow id="Flow_0j671fq" sourceRef="Event_1u4zrhr" targetRef="ExternalTaskTask" />
+    <bpmn:endEvent id="EndEvent1">
+      <bpmn:incoming>Flow_1nt5tlo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0t74qia" sourceRef="ExternalTaskTask" targetRef="VerifyVariableReceivedTask" />
+    <bpmn:sequenceFlow id="Flow_1nt5tlo" sourceRef="VerifyVariableReceivedTask" targetRef="EndEvent1" />
+    <bpmn:userTask id="VerifyVariableReceivedTask" name="Verify Variable Received">
+      <bpmn:extensionElements>
+        <camunda:formData />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t74qia</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nt5tlo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ExternalTaskTask" name="External Task" camunda:type="external" camunda:topic="myTopic">
+      <bpmn:incoming>Flow_0j671fq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t74qia</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:message id="Message_30rae8q" name="wait-response-external" />
+  <bpmn:message id="Message_1quocjf" name="event_cancelled" />
+  <bpmn:message id="Message_3p2nr9i" name="workflow-not-started" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ExternalTaskExample">
+      <bpmndi:BPMNShape id="Activity_1cig8e2_di" bpmnElement="WorkflowStartedSuccessfullyTask">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0reo4y2_di" bpmnElement="Event_0reo4y2">
+        <dc:Bounds x="822" y="242" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gahdg8_di" bpmnElement="WorkflowEndedTask">
+        <dc:Bounds x="640" y="220" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0650foe_di" bpmnElement="Gateway_012in3o">
+        <dc:Bounds x="455" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s93vtx_di" bpmnElement="Event_1s93vtx">
+        <dc:Bounds x="562" y="242" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0y0a1mf_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1u4zrhr_di" bpmnElement="Event_1u4zrhr">
+        <dc:Bounds x="562" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_018tdau_di" bpmnElement="EndEvent1">
+        <dc:Bounds x="1122" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0j8hu6v_di" bpmnElement="VerifyVariableReceivedTask">
+        <dc:Bounds x="830" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0eainpd_di" bpmnElement="ExternalTaskTask">
+        <dc:Bounds x="640" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16r4af1_di" bpmnElement="Flow_16r4af1">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k8fwla_di" bpmnElement="Flow_1k8fwla">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="455" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xhsfi0_di" bpmnElement="Flow_1xhsfi0">
+        <di:waypoint x="740" y="260" />
+        <di:waypoint x="822" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ka8dhj_di" bpmnElement="NotStartedSequenceFlow">
+        <di:waypoint x="480" y="145" />
+        <di:waypoint x="480" y="260" />
+        <di:waypoint x="562" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="483" y="223" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xmuc7j_di" bpmnElement="Flow_0xmuc7j">
+        <di:waypoint x="598" y="260" />
+        <di:waypoint x="640" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_077n0y4_di" bpmnElement="Flow_077n0y4">
+        <di:waypoint x="505" y="120" />
+        <di:waypoint x="562" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0j671fq_di" bpmnElement="Flow_0j671fq">
+        <di:waypoint x="598" y="120" />
+        <di:waypoint x="640" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t74qia_di" bpmnElement="Flow_0t74qia">
+        <di:waypoint x="740" y="120" />
+        <di:waypoint x="830" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nt5tlo_di" bpmnElement="Flow_1nt5tlo">
+        <di:waypoint x="930" y="120" />
+        <di:waypoint x="1122" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
