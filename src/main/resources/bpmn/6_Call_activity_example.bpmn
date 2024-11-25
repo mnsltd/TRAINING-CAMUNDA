@@ -4,7 +4,7 @@
     <bpmn:endEvent id="Event_08a3cnn">
       <bpmn:incoming>Flow_0mk59l8</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="Activity_154l85y" name="Start Loan Approval Process" camunda:asyncBefore="true" calledElement="Camunda3" camunda:variableMappingClass="mu.mns.camunda.delegateMapping.DelegateMapping">
+    <bpmn:callActivity id="Activity_154l85y" name="Start Loan Approval Process" camunda:asyncBefore="true" calledElement="customer_onboarding_en" camunda:variableMappingClass="mu.mns.camunda.delegateMapping.DelegateMapping">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
       </bpmn:extensionElements>
