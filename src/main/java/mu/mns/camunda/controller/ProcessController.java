@@ -41,7 +41,7 @@ public class ProcessController {
         // Start the process instance using the message "camunda-start-message"
         String businessKey = UUID.randomUUID().toString();
         runtimeService.startProcessInstanceByMessage(MessageConstant.WORKFLOW_START_MESSAGE, businessKey,
-                Variables.createVariables().putValue(WORKFLOW_STATUS, "STARTED"));
+                Variables.createVariables().putValue(WORKFLOW_STATUS, "NOT_STARTED"));
         return "camunda process 1 started successfully with businessKey "+ businessKey;
     }
 
@@ -50,7 +50,7 @@ public class ProcessController {
     public String startProcess2() {
         // Start the process instance using the bppmn ID  "MessageEventTaskExample"
         String businessKey = UUID.randomUUID().toString();
-        runtimeService.startProcessInstanceByKey(WorkflowConstant.MESSAGE_EVENT_TASK_EXAMPLE, businessKey);
+        runtimeService.startProcessInstanceByKey("Demo", businessKey);
         return "camunda process MessageEventTaskExample started successfully with businessKey "+ businessKey;
     }
 
@@ -59,7 +59,7 @@ public class ProcessController {
     public String startProcess3() {
         // Start the process instance using the bppmn ID  "BoundaryEventExample"
         String businessKey = UUID.randomUUID().toString();
-        runtimeService.startProcessInstanceByKey(WorkflowConstant.BOUNDARY_EVENT_EXAMPLE, businessKey);
+        runtimeService.startProcessInstanceByKey(WorkflowConstant.BOUNDARY_EVENT_EXAMPLE, businessKey, Variables.createVariables().putValue(WORKFLOW_STATUS, "STARTED"));
         return "camunda process BoundaryEventExample started successfully with businessKey "+ businessKey;
     }
 
